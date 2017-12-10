@@ -1,0 +1,106 @@
+swagger: '2.0'
+
+info:
+  version: 1.0.0
+  title: Cart API
+  description: |
+    * This API will allow users to set up and manage an order of items. 
+    * The API will allow users to add and remove items and change the quantity of the items they want. 
+    * They should also be able to simply clear out all items from their order and start again. 
+host: not.sure.about.this.one.yet
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+
+paths:
+  /cart:
+    get:
+      description: |
+        Get the content of the customer's cart
+      responses:
+        200:
+          description: Request successful
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/cart'
+        500:
+          $ref: '#/responses/500'
+    put:
+      description: Edit cart
+      parameters:
+        - name: cart
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/cart'
+      responses:
+        201:
+          description: Request successful
+        400:
+          $ref: '#/responses/400'
+        500:
+          $ref: '#/responses/500'
+
+definitions:
+  cart:
+    type: object
+    properties:
+      items:
+        type: array
+        items:
+          $ref: "#/definitions/cart_item"
+          
+  cart_item:
+    type: object
+    properties:
+      article:
+        $ref: "#/definitions/article_short"
+      quantity:
+        type: integer
+        
+  article_short:
+    type: object
+    properties:
+      id:
+        type: integer
+        
+  api_error:
+    type: object
+    properties:
+      status:
+        description: |
+          An http status code.
+        type: integer
+        example: 500
+      title:
+        type: string
+        description: |
+          A brief description of the error.
+        example: Not Found
+      type:
+        type: string
+        format: uri
+        description: |
+          An uri to a human-readable documentation for the error type.
+        example: 'http://httpstatuses.com/400'
+
+responses:
+  400:
+    description: |
+      The request is invalid.
+    schema:
+      $ref: '#/definitions/api_error'
+
+  500:
+    description: |
+      Internal server error.
+    schema:
+      $ref: '#/definitions/api_error'
+    
