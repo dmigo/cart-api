@@ -1,6 +1,6 @@
 namespace Api.Models
 {
-    public class ArticleShort
+    public class ArticleShortModel
     {
         public int Id { get; set; }
     }

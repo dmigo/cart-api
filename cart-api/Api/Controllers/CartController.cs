@@ -1,53 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Api.Models;
+using Cart;
+using Api.Mappers;
 
 namespace Api.Controllers
 {
     [Route("api/[controller]")]
     public class CartController : Controller
     {
-        public CartController()
+        ICartFacade _cartFacade;
+
+        public CartController(ICartFacade cartFacade)
         {
-            
+            _cartFacade = cartFacade;
         }
-        
+
         [HttpGet]
         public IActionResult Get()
         {
-            var result = new Cart{
-                Items = new []{
-                    new CartItem{
-                        Article = new ArticleShort{
-                            Id=1
-                        },
-                        Quantity = 10
-                    },
-                    new CartItem{
-                        Article = new ArticleShort{
-                            Id=32167
-                        },
-                        Quantity = 2
-                    },
-                    new CartItem{
-                        Article = new ArticleShort{
-                            Id=1337
-                        },
-                        Quantity = 17
-                    },
-                }
-            };
-
+            var cart = _cartFacade.GetCurrentCart();
+            var result = cart.ToModel();
             return Ok(result);
         }
 
-        [HttpPut("{id}")]
-        public IActionResult Put([FromBody]Cart cart)
+        [HttpPut]
+        public IActionResult Put([FromBody]CartModel cartModel)
         {
-            return NotFound();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            
+            var cart = cartModel.ToDomain();
+            _cartFacade.UpdateCart(cart);
+            return Ok();
         }
     }
 }
