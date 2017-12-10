@@ -16,7 +16,7 @@ produces:
   - application/json
 
 paths:
-  /cart:
+  /api/cart:
     get:
       description: |
         Get the content of the customer's cart
@@ -41,7 +41,7 @@ paths:
           schema:
             $ref: '#/definitions/cart'
       responses:
-        201:
+        200:
           description: Request successful
         400:
           $ref: '#/responses/400'
