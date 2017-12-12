@@ -68,5 +68,18 @@ namespace Client.Tests
 
             Assert.Throws<ArgumentNullException>(() => target.Add(null, 10));
         }
+
+        [Fact]
+        public void Add_SeveralItems_CountMatches()
+        {
+            var client = new Mock<ShopClient>();
+            var target = new Cart(client.Object);
+
+            target.Add(new Article { Id = 10 }, 11);
+            target.Add(new Article { Id = 11 }, 2);
+            target.Add(new Article { Id = 12 }, 33);
+
+            Assert.Equal(3, target.Items.Count);
+        }
     }
 }
