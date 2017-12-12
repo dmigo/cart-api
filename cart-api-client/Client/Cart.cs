@@ -36,21 +36,9 @@ namespace Client
             _items[article] = newQuantity;
         }
 
-        public void Remove(Article article)
-        {
-            throw new NotImplementedException();
-        }
-
         public void Clear()
         {
             _items.Clear();
-        }
-
-        public void SetPosition(Article article, int position)
-        {
-            //ToDo throw out of range 
-            //ToDo throw article is not in cart
-            throw new NotImplementedException();
         }
 
         public void Load(){
