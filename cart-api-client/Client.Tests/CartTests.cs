@@ -2,6 +2,7 @@ using System;
 using Xunit;
 using Moq;
 using Client;
+using System.Collections.Generic;
 
 namespace Client.Tests
 {
@@ -10,7 +11,7 @@ namespace Client.Tests
         [Fact]
         public void Add_NewArticle_QuantityMatches()
         {
-            var client = new Mock<ShopClient>();
+            var client = new Mock<IShopClient>();
             var target = new Cart(client.Object);
             var article = new Article { Id = 10 };
 
@@ -23,7 +24,7 @@ namespace Client.Tests
         [Fact]
         public void Add_ExistingArticle_QuantityAdds()
         {
-            var client = new Mock<ShopClient>();
+            var client = new Mock<IShopClient>();
             var target = new Cart(client.Object);
             var article = new Article { Id = 10 };
 
@@ -37,7 +38,7 @@ namespace Client.Tests
         [Fact]
         public void Add_NegativeQuantity_RemovesItems()
         {
-            var client = new Mock<ShopClient>();
+            var client = new Mock<IShopClient>();
             var target = new Cart(client.Object);
             var article = new Article { Id = 10 };
 
@@ -51,7 +52,7 @@ namespace Client.Tests
         [Fact]
         public void Add_NegativeQuantityMoreThanCurrent_ThrowsException()
         {
-            var client = new Mock<ShopClient>();
+            var client = new Mock<IShopClient>();
             var target = new Cart(client.Object);
             var article = new Article { Id = 10 };
 
@@ -63,7 +64,7 @@ namespace Client.Tests
         [Fact]
         public void Add_ArticleIsNull_ThrowsException()
         {
-            var client = new Mock<ShopClient>();
+            var client = new Mock<IShopClient>();
             var target = new Cart(client.Object);
 
             Assert.Throws<ArgumentNullException>(() => target.Add(null, 10));
@@ -72,7 +73,7 @@ namespace Client.Tests
         [Fact]
         public void Add_SeveralItems_CountMatches()
         {
-            var client = new Mock<ShopClient>();
+            var client = new Mock<IShopClient>();
             var target = new Cart(client.Object);
 
             target.Add(new Article { Id = 10 }, 11);
@@ -85,7 +86,7 @@ namespace Client.Tests
         [Fact]
         public void Clear_HasSeveralItems_ItemsReturnsEmpty()
         {
-            var client = new Mock<ShopClient>();
+            var client = new Mock<IShopClient>();
             var target = new Cart(client.Object);
 
             target.Add(new Article { Id = 10 }, 11);
@@ -96,7 +97,28 @@ namespace Client.Tests
             Assert.Equal(0, target.Items.Count);
         }
 
+        [Fact]
+        public void Load_ThrowsException_ShopClientExceptionRethrown()
+        {
+            var client = new Mock<IShopClient>();
+            client
+                .Setup(x => x.FetchCart())
+                .Throws(new Exception());
+            var target = new Cart(client.Object);
 
+            Assert.Throws<ShopClientException>(() => target.Load());
+        }
 
+        [Fact]
+        public void Submit_ThrowsException_ShopClientExceptionRethrown()
+        {
+            var client = new Mock<IShopClient>();
+            client
+                .Setup(x => x.SubmitCart(It.IsAny<IDictionary<Article, int>>()))
+                .Throws(new Exception());
+            var target = new Cart(client.Object);
+
+            Assert.Throws<ShopClientException>(() => target.Submit());
+        }
     }
 }

@@ -4,32 +4,31 @@ using System.Collections.Generic;
 
 namespace Client
 {
-    //ToDo have some tests
     //ToDo add comments
     public class Cart
     {
-        ShopClient _client;
+        IShopClient _client;
 
         IDictionary<Article, int> _items = new Dictionary<Article, int>();
 
         public IDictionary<Article, int> Items => _items;
 
-        public Cart(ShopClient client)
+        public Cart(IShopClient client)
         {
-            _client = client;
+            _client = client ?? throw new ArgumentNullException(nameof(client));
         }
 
         public void Add(Article article, int quantity)
         {
             if (article == null)
                 throw new ArgumentNullException(nameof(article));
-            
+
             var currentQuantity = _items.ContainsKey(article) ? _items[article] : 0;
             var newQuantity = currentQuantity + quantity;
 
             if (newQuantity < 0)
                 throw new NegativeQuantityException(
-                    article.Id, 
+                    article.Id,
                     quantity
                 );
 
@@ -41,12 +40,29 @@ namespace Client
             _items.Clear();
         }
 
-        public void Load(){
-            _items = _client.FetchCart();
+        public void Load()
+        {
+            try
+            {
+                _items = _client.FetchCart();
+            }
+            catch (Exception ex)
+            {
+                throw new ShopClientException(ex);
+            }
         }
 
-        public void Submit(){
-            _client.SubmitCart(this.Items);
+        public void Submit()
+        {
+            try
+            {
+                _client.SubmitCart(this.Items);
+
+            }
+            catch (Exception ex)
+            {
+                throw new ShopClientException(ex);
+            }
         }
     }
 }
