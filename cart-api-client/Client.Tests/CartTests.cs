@@ -81,5 +81,20 @@ namespace Client.Tests
 
             Assert.Equal(3, target.Items.Count);
         }
+
+        [Fact]
+        public void Clear_HasSeveralItems_ItemsReturnsEmpty()
+        {
+            var client = new Mock<ShopClient>();
+            var target = new Cart(client.Object);
+
+            target.Add(new Article { Id = 10 }, 11);
+            target.Add(new Article { Id = 11 }, 11);
+            target.Add(new Article { Id = 12 }, 11);
+            target.Clear();
+
+            Assert.Equal(0, target.Items.Count);
+        }
+
     }
 }
