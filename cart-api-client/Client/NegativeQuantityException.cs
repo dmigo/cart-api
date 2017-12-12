@@ -3,6 +3,9 @@ using System.Runtime.Serialization;
 
 namespace Client
 {
+    /// <summary>
+    /// This exception indicates attempt of creating a negative amount of items.
+    /// </summary>
     [Serializable]
     public class NegativeQuantityException : Exception
     {
