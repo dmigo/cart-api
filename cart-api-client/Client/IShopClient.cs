@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Client
 {
@@ -7,7 +8,7 @@ namespace Client
     /// </summary>
     public interface IShopClient
     {
-        IDictionary<Article, int> FetchCart();
-        void SubmitCart(IDictionary<Article, int> cart);
+        Task<IDictionary<Article, int>> FetchCart();
+        Task SubmitCart(IDictionary<Article, int> cart);
     }
 }

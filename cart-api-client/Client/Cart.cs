@@ -62,7 +62,7 @@ namespace Client
         {
             try
             {
-                _items = _client.FetchCart();
+                _items = _client.FetchCart().Result;
             }
             catch (Exception ex)
             {
@@ -77,8 +77,7 @@ namespace Client
         {
             try
             {
-                _client.SubmitCart(this.Items);
-
+                _client.SubmitCart(this.Items).Wait();
             }
             catch (Exception ex)
             {

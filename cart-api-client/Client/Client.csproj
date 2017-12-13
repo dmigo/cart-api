@@ -7,4 +7,8 @@
   <ItemGroup>
     <Compile Remove="CartItem.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Net.Http.Formatting.Extension" Version="5.2.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+  </ItemGroup>
 </Project>
