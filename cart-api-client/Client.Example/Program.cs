@@ -18,7 +18,7 @@ namespace Client.Example
             var host = "http://localhost";
             var port = 5000;
 
-            var client = new ShopClient { Host = host, Port = port };
+            var client = new Client.ShopClient.ShopClient { Host = host, Port = port };
             var cart = new Cart(client);
 
             cart.Load();

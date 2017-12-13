@@ -6,8 +6,10 @@ using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Linq;
+using Client.ShopClient.Models;
 
-namespace Client
+
+namespace Client.ShopClient
 {
     /// <summary>
     /// Implementation of a <see cref="T:Client:IShopClient"/>.
@@ -76,33 +78,6 @@ namespace Client
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
             return client;
-        }
-    }
-
-    class CartModel
-    {
-        public IEnumerable<CartItemModel> Items
-        {
-            get; set;
-        }
-    }
-
-    class CartItemModel
-    {
-        public ArticleModel Article
-        {
-            get;
-            set;
-        }
-        public int Quantity { get; set; }
-    }
-
-    class ArticleModel
-    {
-        public int Id
-        {
-            get;
-            set;
         }
     }
 }
